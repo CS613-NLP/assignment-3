@@ -4,7 +4,12 @@ warnings.filterwarnings("ignore")
 
 from transformers import AutoTokenizer
 from transformers import LineByLineTextDataset
-from transformers import BertConfig, BertForMaskedLM, DataCollatorForLanguageModeling
+from transformers import (
+    BertConfig,
+    BertForMaskedLM,
+    DataCollatorForLanguageModeling,
+    BertForPreTraining,
+)
 from transformers import Trainer, TrainingArguments
 from transformers import TrainerCallback, TrainerState, TrainerControl
 import os
@@ -27,7 +32,7 @@ print("No. of lines: ", len(dataset))
 
 config = BertConfig()
 
-model = BertForMaskedLM(config)
+model = BertForPreTraining(config)
 print("No of parameters: ", model.num_parameters())
 
 data_collator = DataCollatorForLanguageModeling(
@@ -87,7 +92,7 @@ print("Training started ......")
 
 trainer.train()
 #### Please add your Hugging Face repo here:
-PATH = "Where you want to push"
+PATH = "Skratch99/pre-trained-bert"
 our_tokenizer.push_to_hub(PATH)
 model.push_to_hub(PATH)
 

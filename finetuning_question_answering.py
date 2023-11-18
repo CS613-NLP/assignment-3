@@ -3,7 +3,7 @@ from transformers import AutoTokenizer
 from transformers import TFAutoModelForQuestionAnswering
 from transformers import DefaultDataCollator
 from transformers import create_optimizer
-from transformers.keras_callbacks import PushToHubCallback
+from transformers.keras_callbacks impor t PushToHubCallback
 import tensorflow as tf
 
 raw_datasets = load_dataset("squad_v2")
