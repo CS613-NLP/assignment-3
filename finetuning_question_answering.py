@@ -3,7 +3,7 @@ from transformers import AutoTokenizer
 from transformers import TFAutoModelForQuestionAnswering
 from transformers import DefaultDataCollator
 from transformers import create_optimizer
-from transformers.keras_callbacks impor t PushToHubCallback
+from transformers.keras_callbacks import PushToHubCallback
 import tensorflow as tf
 
 raw_datasets = load_dataset("squad_v2")
@@ -152,20 +152,20 @@ tf_train_dataset = model.prepare_tf_dataset(
     train_dataset,
     collate_fn=data_collator,
     shuffle=True,
-    batch_size=32,
+    batch_size=16,
 )
 tf_eval_dataset = model.prepare_tf_dataset(
     test_dataset,
     collate_fn=data_collator,
     shuffle=False,
-    batch_size=32,
+    batch_size=16,
 )
 
 
 # The number of training steps is the number of samples in the dataset, divided by the batch size then multiplied
 # by the total number of epochs. Note that the tf_train_dataset here is a batched tf.data.Dataset,
 # not the original Hugging Face Dataset, so its len() is already num_samples // batch_size.
-num_train_epochs = 5
+num_train_epochs = 10
 num_train_steps = len(tf_train_dataset) * num_train_epochs
 optimizer, schedule = create_optimizer(
     init_lr=2e-5,
@@ -178,7 +178,7 @@ model.compile(optimizer=optimizer)
 # Train in mixed-precision float16
 tf.keras.mixed_precision.set_global_policy("mixed_float16")
 
-callback = PushToHubCallback(output_dir="bert-finetuned-squadv2", tokenizer=tokenizer)
+callback = PushToHubCallback(output_dir="finetuned-bert-squadv2", tokenizer=tokenizer)
 
 # We're going to do validation afterwards, so no validation mid-training
 

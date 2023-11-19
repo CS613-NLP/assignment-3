@@ -34,7 +34,8 @@ device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cp
 
 model = BertForSequenceClassification.from_pretrained("Skratch99/bert-pretrained").to(device)
 
-MAX_LENGTH = 128
+# Change the max_length according to your wish
+MAX_LENGTH = 256
 train_dataset = train_dataset.map(lambda e: tokenizer(e['sentence'], truncation=True, padding='max_length', max_length=MAX_LENGTH), batched=True)
 test_dataset = test_dataset.map(lambda e: tokenizer(e['sentence'], truncation=True, padding='max_length', max_length=MAX_LENGTH), batched=True)
 
@@ -61,7 +62,7 @@ def compute_metrics(pred):
 training_args = TrainingArguments(
     output_dir='sst2_results',          #output directory
     learning_rate=1e-4,
-    num_train_epochs=5,
+    num_train_epochs=10,
     per_device_train_batch_size=32,                #batch size per device during training
     per_device_eval_batch_size=32,                #batch size for evaluation
     logging_dir='sst2_logs',
@@ -84,11 +85,14 @@ trainer = Trainer(
 
 train_out = trainer.train()
 
-## PATH = "bert_sst2_finetuned"
-PATH = None # Set the path to the huggingface here to save the model
+PATH = "bert_sst2_finetuned"
+# PATH = None # Set the path to the huggingface here to save the model
 
 model.push_to_hub(PATH)
 
 results = trainer.evaluate(eval_dataset = test_dataset)
-
 print("Test results on test_dataset:", results)
+
+
+train_results = trainer.evaluate(eval_dataset = train_dataset)
+print("Test results on train_dataset:", train_results)

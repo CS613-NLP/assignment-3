@@ -8,7 +8,6 @@ from transformers import (
     BertConfig,
     BertForMaskedLM,
     DataCollatorForLanguageModeling,
-    BertForPreTraining,
 )
 from transformers import Trainer, TrainingArguments
 from transformers import TrainerCallback, TrainerState, TrainerControl
@@ -32,7 +31,7 @@ print("No. of lines: ", len(dataset))
 
 config = BertConfig()
 
-model = BertForPreTraining(config)
+model = BertForMaskedLM(config)
 print("No of parameters: ", model.num_parameters())
 
 data_collator = DataCollatorForLanguageModeling(
@@ -53,7 +52,6 @@ class PerplexityCallback(TrainerCallback):
     def on_epoch_end(
         self, args, state: TrainerState, control: TrainerControl, **kwargs
     ):
-        perplexities.append(math.exp(state.log_history[self.epoch]["loss"]))
         self.epoch += 1
         print(f"Epoch {self.epoch}")
         print(f"state.log_history: {state.log_history}")
@@ -63,7 +61,7 @@ perplexity_callback = PerplexityCallback(model)
 
 
 training_args = TrainingArguments(
-    output_dir="/checkpoints",
+    output_dir="checkpoints",
     overwrite_output_dir=True,
     num_train_epochs=5,
     per_device_train_batch_size=32,
@@ -92,7 +90,7 @@ print("Training started ......")
 
 trainer.train()
 #### Please add your Hugging Face repo here:
-PATH = "Skratch99/pre-trained-bert"
+PATH = "Skratch99/bert-pretrained"
 our_tokenizer.push_to_hub(PATH)
 model.push_to_hub(PATH)
 
