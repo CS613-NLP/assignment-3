@@ -15,9 +15,11 @@ import os
 import math
 import torch
 
+# fetch the tokenizer and pretrain on our dataset
 our_tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 our_tokenizer.train_new_from_iterator("wikitext_2_raw_v1.txt", 30522)
 
+# dataset tokenized
 dataset = LineByLineTextDataset(
     tokenizer=our_tokenizer, file_path="wikitext_2_raw_v1.txt", block_size=128
 )
@@ -28,7 +30,7 @@ validation_dataset = LineByLineTextDataset(
 
 print("No. of lines: ", len(dataset))
 
-
+# Create the model and its specifications
 config = BertConfig()
 
 model = BertForMaskedLM(config)
@@ -43,7 +45,7 @@ perplexities = []
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 model.to(device)
 
-
+# Perplexity calculation
 class PerplexityCallback(TrainerCallback):
     def __init__(self, model):
         self.epoch = 0
@@ -59,6 +61,7 @@ class PerplexityCallback(TrainerCallback):
 
 perplexity_callback = PerplexityCallback(model)
 
+# Training arguments
 
 training_args = TrainingArguments(
     output_dir="checkpoints",
@@ -77,6 +80,7 @@ training_args = TrainingArguments(
     eval_accumulation_steps=50,
 )
 
+
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -88,7 +92,10 @@ trainer = Trainer(
 
 print("Training started ......")
 
+# Training the model
 trainer.train()
+
+# Pushing the model to Hugging face
 #### Please add your Hugging Face repo here:
 PATH = "Skratch99/bert-pretrained"
 our_tokenizer.push_to_hub(PATH)
