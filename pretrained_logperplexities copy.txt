@@ -1,5 +1,0 @@
-Epoch 1: 87.23
-Epoch 2: 31.60
-Epoch 3: 19.16
-Epoch 4: 12.09
-Epoch 5: 10.88
