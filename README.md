@@ -1,6 +1,8 @@
 # Assignment-3
 This repository contains the python scripts and notebooks for Assignment-3 NLP.
 
+
+## Codebase
 The assignment is divided into 3 main sections:
 - **Pretraining** the model(bert-base-uncased) on given dataset (wikitext_raw_2_v1)
 - **Finetuning** the pretrained model for specific tasks (Classification and Question & Answering)
@@ -27,10 +29,13 @@ To find all the respective code files, refer to the below file structure:
 - Calculating Parameters for models: [parameter_calculation](parameter_calculation.py)
 
 
+## Models
 Our pre-trained model is pushed on Hugging Face as: [Skratch99/bert-pretrained](https://huggingface.co/Skratch99/bert-pretrained)
 
 Our fine-tuned model for classification is pushed as: [Nokzendi/bert_sst2_finetuned](https://huggingface.co/Nokzendi/bert_sst2_finetuned)
 
 Our fine-tuned model for question & answering is pushed as: [Skratch99/finetuned-bert-squadv2](https://huggingface.co/Skratch99/finetuned-bert-squadv2)
 
+
+## Report
 The assignment [report](report.pdf) can be found here.
